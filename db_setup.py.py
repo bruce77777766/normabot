@@ -12,10 +12,21 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 # Настройка логирования
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+scope = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
 
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("/home/bruce777777/vk-bot-435206-15c9cc3adec9.json", scope)
+# Загружаем учетные данные
+creds = ServiceAccountCredentials.from_json_keyfile_name("path/to/your/service_account.json", scope)
+
+# Авторизуемся
 client = gspread.authorize(creds)
+
+# Теперь вы можете открыть таблицу по имени или ID
+spreadsheet = client.open("Your Spreadsheet Name")
+json_keyfile = os.getenv('GOOGLE_SHEETS_JSON_KEY')
+creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(json_keyfile), scope)
 # Подключение к базе данных SQLite
 # Подключение к базе данных SQLite
 # Сообщение о создании/открытии базы данных
