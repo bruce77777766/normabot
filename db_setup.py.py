@@ -11,14 +11,22 @@ import gspread.utils
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 # Настройка логирования
+# Настройка логирования
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Определяем области видимости
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
 
-# Загружаем учетные данные
-creds = ServiceAccountCredentials.from_json_keyfile_name("path/to/your/service_account.json", scope)
+# Загружаем учетные данные из переменной среды
+json_keyfile = os.getenv('GOOGLE_SHEETS_JSON_KEY')
+if json_keyfile is None:
+    logging.error("Не установлена переменная среды GOOGLE_SHEETS_JSON_KEY")
+    raise ValueError("Не установлена переменная среды GOOGLE_SHEETS_JSON_KEY")
+
+creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(json_keyfile), scope)
 
 # Авторизуемся
 client = gspread.authorize(creds)
